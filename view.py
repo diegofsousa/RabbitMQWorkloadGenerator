@@ -1,6 +1,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import sys
+from architecture import Emitter, Receptor
 
 class index(QDialog):
 	def __init__(self, parent=None):
@@ -74,10 +75,14 @@ class index(QDialog):
 
 	def runTests(self):
 		if self.btnQntChar.text() == "Select..." or self.btnQntMessages.text() == "Select...":
-			print("Entrada inválida")
 			msg = QMessageBox.information(self, "Entrada inválida!",
 											"Alguns valores não foram selecionados.",
 											 QMessageBox.Close)
+		else:
+			self.receptor = Receptor(int(self.btnQntChar.text()[0:3]), int(self.btnQntMessages.text()[0:3]))
+			self.receptor.start()
+			self.emitter = Emitter(int(self.btnQntChar.text()[0:3]), int(self.btnQntMessages.text()[0:3]))
+			self.emitter.start()
 
 app = QApplication(sys.argv)
 dlg = index()
