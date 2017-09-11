@@ -22,8 +22,6 @@ class Emitter(QThread):
 			self.channel.basic_publish(exchange='',
 	                      routing_key='hello',
 	                      body=message)
-			print(message)
-
 	def new(self):
 		self.run()
 		
@@ -41,7 +39,7 @@ class Receptor(QThread):
 		self.totalList = []
 		self.horarios = []
 		self.count = 0
-		self.arq = open('receptores.txt', 'a')
+		self.arq = open('logs/recept.data', 'a')
 
 		QThread.__init__(self)
 
@@ -70,8 +68,6 @@ class Receptor(QThread):
 			
 			if self.count < 30:
 				self.totalList.append(nowList)
-				#nowList.clear()
-				print("veio aqui")
 				self.lista.clear()
 				self.horarios.clear()
 				self.count += 1

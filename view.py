@@ -98,7 +98,6 @@ class index(QDialog):
 	def again(self, numberIter):
 		self.btnRunTests.setEnabled(False)
 		self.btnRunTests.setText("Running tests... ({}/30)".format(numberIter))
-		print("veio aqui")
 		self.emitter.new()
 
 	def questionUser(self, lista):
@@ -106,7 +105,7 @@ class index(QDialog):
 									 "Do you want to see the results of the experiments?",
 									QMessageBox.Yes|QMessageBox.No)
 		if resp == 16384:
-			print("Mostrar resultados!")
+			print("Em execução!")
 			# print(lista)
 
 			listOfMeanAmosts = []
@@ -117,21 +116,17 @@ class index(QDialog):
 			for i in range(len(lista[0])):
 				auxSum = 0
 				for j in range(30):
-					auxSum =+ lista[j][i]
+					auxSum =+ lista[j][i].microseconds
 				listOfMeanAmosts.append(auxSum/30)
 
 			for i in range(len(lista[0])):
 				auxSum = 0
 				for j in range(30):
-					auxSum =+ (lista[j][i] - listOfMeanAmosts[i]).total_seconds()**2
+					auxSum =+ (lista[j][i].microseconds - listOfMeanAmosts[i])**2
 				listOfVarianceAmosts.append(auxSum/30)
 
 			for i in range(len(lista[0])):
 				listOfStandartDeviation.append(sqrt(listOfVarianceAmosts[i]))
-
-			print(listOfMeanAmosts)
-			print(listOfVarianceAmosts)
-			print(listOfStandartDeviation)
 			dlg = Results(listOfMeanAmosts, listOfVarianceAmosts, listOfStandartDeviation)
 			dlg.exec_()
 
@@ -139,7 +134,7 @@ class index(QDialog):
 			self.clearConfiguration()
 
 	def clearConfiguration(self):
-		arq = open('receptores.txt', 'w')
+		arq = open('logs/recept.data', 'w')
 		arq.write("")
 		arq.close()
 		self.receptor.lista.clear()
