@@ -1,8 +1,8 @@
 # RabbitMQWorkloadGenerator
 
-This is a workload generator for the RabbitMQ message queue.
+> This is a workload generator for the RabbitMQ message queue.
 
-Step by Step to Install:
+## Step by Step to Install:
 
 First of all, have pip and virtualenv installed.
 
@@ -35,3 +35,17 @@ SIP: https://www.riverbankcomputing.com/software/sip/download<br>
 ```pip install -r requirements.txt .```
 
 9. Still in the app folder run ```python view.py```
+
+## How to use:
+
+After running the ```python view.py``` command on the terminal, the application will start an interface. Select the workload and go to "run tests!".
+
+![screenshot](howto01.png)
+
+The app will ask you if you want to see results from the experiment. Upon confirmation, the graphs of mean, variance and standard deviation of the samples will be displayed on the screen.
+
+![screenshot](howto02.png)
+
+You can also save this in a PDF.
+
+![screenshot](howto03.png)

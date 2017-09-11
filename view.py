@@ -104,7 +104,7 @@ class index(QDialog):
 									 "Do you want to see the results of the experiments?",
 									QMessageBox.Yes|QMessageBox.No)
 		if resp == 16384:
-			print("Em execução!")
+			print("Running!")
 
 			listOfMeanAmosts = []
 			listOfVarianceAmosts = []

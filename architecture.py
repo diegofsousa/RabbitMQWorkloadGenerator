@@ -56,11 +56,11 @@ class Receptor(QThread):
 		self.horarios.append(a)
 		self.lista.append(body.decode())
 		if len(self.lista) == self.numMessages:
-			self.arq.write("Resultados da {} iteração\n".format(self.count + 1))
-			print("\n\nResultado:\n")
+			self.arq.write("Results of {} iteration\n".format(self.count + 1))
+			print("\n\nResults:\n")
 			for i in range(len(self.lista)):
 				a = datetime(int(self.lista[i][0:4]), int(self.lista[i][5:7]), int(self.lista[i][8:10]), int(self.lista[i][13:15]), int(self.lista[i][16:18]), int(self.lista[i][19:21]), int(self.lista[i][22:28]))
-				info = "Atraso da mensagem {}: {}".format(i+1, self.horarios[i] - a)
+				info = "Message delay {}: {}".format(i+1, self.horarios[i] - a)
 				self.arq.write(info + "\n")
 				print(info)
 				nowList.append(self.horarios[i]-a)
