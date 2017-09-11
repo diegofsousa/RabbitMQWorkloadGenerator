@@ -5,14 +5,19 @@ from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 import sys
 import random
+from pdfmaker import make_pdf
 
 class Results(QDialog):
-	def __init__(self, listOfMeanAmosts, listOfVarianceAmosts, listOfStandartDeviation, parent=None):
+	"""Class that displays the results of the experiments"""
+	def __init__(self, listOfMeanAmosts, listOfVarianceAmosts, listOfStandartDeviation,
+				 qtdChars, qtdMessages, parent=None):
 		super(Results, self).__init__(parent)
 
 		self.listOfMeanAmosts = listOfMeanAmosts
 		self.listOfVarianceAmosts = listOfVarianceAmosts
 		self.listOfStandartDeviation = listOfStandartDeviation
+		self.qtdChars = qtdChars
+		self.qtdMessages = qtdMessages
 
 		self.setWindowTitle("Results - RabbitMQ Workload Generator")
 
@@ -25,14 +30,10 @@ class Results(QDialog):
 		self.canvasVariance = FigureCanvas(self.figureVariance)
 
 		# For SDeviation
-		# self.figureSDeviation = Figure()
-		# self.canvasSDeviation = FigureCanvas(self.figureSDeviation)
-
 		lblTitle = QLabel("<center><h3>Results of the experiment:</h3></center>")
 
 		lblMean = QLabel("The average sample time is to quantify the\n performance of the message queue.\n The X-axis represents the messages\n while Y represents the time in microseconds.")
 		lblVariance = QLabel("The variance is also adequate for 30 times\n and is calculated based on the mean. So\n is the standard deviation. The X-axis represents\n the messages while Y represents the time in\n microseconds.")
-		# lblSDeviation = QLabel("The average sample time is to quantify\n the performance of the message queue.\n The X-axis represents the messages\n while Y represents the time in microseconds.")
 
 		hbox1 = QHBoxLayout()
 		hbox2 = QHBoxLayout()
@@ -56,15 +57,15 @@ class Results(QDialog):
 		totalbox.addLayout(hbox1)
 		totalbox.addLayout(hbox2)
 		totalbox.addLayout(hbox3)
-		# totalbox.addLayout(hbox3)
+		
 		self.setLayout(totalbox)
 
 		self.connect(btnExit, SIGNAL("clicked()"), SLOT("reject()"))
+		self.connect(btnSavePDF, SIGNAL("clicked()"), self.makePdf)
 
 		self.setGeometry(300,100,1000,700)
 
 	def plotMean(self):
-		''' plot some random stuff '''
 		N = len(self.listOfMeanAmosts)
 		x = range(1,len(self.listOfMeanAmosts)+1)
 		width = 1/1.1
@@ -74,21 +75,17 @@ class Results(QDialog):
 		plt.bar(x, self.listOfMeanAmosts, width, color="c")
 		plt.grid(True)
 		plt.set_title("Mean Time of The Samples 30 Times Repeated")
-		#plt.set_xlabel("Messages")
-		#plt.set_ylabel("Time (microseconds)")
 		self.canvasMean.draw()
 
 	def plotVarianceSD(self):
-		''' plot some random stuff '''
 		plt = self.figureVariance.add_subplot(111)
-
-		#plt.bar(x, self.listOfVarianceAmosts, width, color="g")
 		a, = plt.plot(self.listOfVarianceAmosts, label='Variance', linestyle='--')
 		b, = plt.plot(self.listOfStandartDeviation, label='Standart Deviation', linestyle='-.')
 		plt.legend([a, b],["Variance", "Standart Deviation"])
 		plt.grid(True)
 		plt.set_title("Variance Time of The Samples 30 Times Repeated")
-		#plt.set_xlabel("Messages")
-		#plt.set_ylabel("Time (microseconds)")
-		#plt.legend((a,b), ("Variance", "Standart Deviation"), 'upper left')
 		self.canvasVariance.draw()
+
+	def makePdf(self):
+		make_pdf(self.listOfMeanAmosts, self.listOfVarianceAmosts,
+				 self.listOfStandartDeviation,self.qtdChars, self.qtdMessages)

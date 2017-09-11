@@ -6,6 +6,7 @@ from results import Results
 from math import sqrt
 
 class index(QDialog):
+	"""Initial class, this must be performed initially"""
 	def __init__(self, parent=None):
 		super(index, self).__init__(parent)
 
@@ -24,8 +25,6 @@ class index(QDialog):
 			+"<center><h3>ABOUT:</h3></center>\n\n"
 			+"This software was developed by the team of graduates <br>Antonio S. V. C. Junior, Diego F. S. Lima, Vitorio S. A. Rocha<br> and is of free distribution in: <br> https://github.com/diegofsousa/RabbitMQWorkloadGenerator.")
 		lblselecoes = QLabel("<center><h3>Workload Selections:</h3></center>")
-
-
 
 		hbox1.addWidget(lbllogo)
 		hbox1.addWidget(lblintrucoes)
@@ -85,8 +84,8 @@ class index(QDialog):
 
 	def runTests(self):
 		if self.btnQntChar.text() == "Select..." or self.btnQntMessages.text() == "Select...":
-			msg = QMessageBox.information(self, "Entrada inválida!",
-											"Alguns valores não foram selecionados.",
+			msg = QMessageBox.information(self, "Invalid Input!",
+											"Some values were not selected.",
 											 QMessageBox.Close)
 		else:
 			self.receptor.numCharacters = int(self.btnQntChar.text()[0:3])
@@ -106,28 +105,30 @@ class index(QDialog):
 									QMessageBox.Yes|QMessageBox.No)
 		if resp == 16384:
 			print("Em execução!")
-			# print(lista)
 
 			listOfMeanAmosts = []
 			listOfVarianceAmosts = []
 			listOfStandartDeviation = []
 
-			# some algorithms
+			# average calculation
 			for i in range(len(lista[0])):
 				auxSum = 0
 				for j in range(30):
 					auxSum =+ lista[j][i].microseconds
 				listOfMeanAmosts.append(auxSum/30)
 
+			# variance calculation
 			for i in range(len(lista[0])):
 				auxSum = 0
 				for j in range(30):
 					auxSum =+ (lista[j][i].microseconds - listOfMeanAmosts[i])**2
 				listOfVarianceAmosts.append(auxSum/30)
 
+			# standart deviation calculation
 			for i in range(len(lista[0])):
 				listOfStandartDeviation.append(sqrt(listOfVarianceAmosts[i]))
-			dlg = Results(listOfMeanAmosts, listOfVarianceAmosts, listOfStandartDeviation)
+
+			dlg = Results(listOfMeanAmosts, listOfVarianceAmosts, listOfStandartDeviation, self.btnQntChar.text()[0:3], self.btnQntMessages.text()[0:3])
 			dlg.exec_()
 
 		else:
@@ -141,7 +142,7 @@ class index(QDialog):
 		self.receptor.totalList.clear()
 		self.receptor.horarios.clear()
 		self.receptor.count = 0
-		self.receptor.arq = open('receptores.txt', 'a')
+		self.receptor.arq = open('logs/recept.data', 'a')
 		self.btnRunTests.setEnabled(True)
 		self.btnRunTests.setText("Run tests!")
 

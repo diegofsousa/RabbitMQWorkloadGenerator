@@ -5,7 +5,7 @@ import pika
 from datetime import datetime
 
 class Emitter(QThread):
-	"""docstring for Emitter"""
+	"""Thread-class responsible for publish topics"""
 	def __init__(self, numCharacters, numMessages):
 		self.numCharacters = numCharacters
 		self.numMessages = numMessages
@@ -27,7 +27,7 @@ class Emitter(QThread):
 		
 
 class Receptor(QThread):
-	"""docstring for Receptor"""
+	"""Thread-class responsible for consuming topics"""
 	mysignal = pyqtSignal(list)
 	def __init__(self, numCharacters, numMessages):
 		self.numCharacters = numCharacters
